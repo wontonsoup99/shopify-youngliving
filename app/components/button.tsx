@@ -16,7 +16,8 @@ export let variants = cva(
     variants: {
       variant: {
         primary: [
-          "border px-4 py-3",
+          "rounded-sm",
+          "border px-4 py-3 rounded-md",
           "text-[--btn-primary-text]",
           "bg-[--btn-primary-bg]",
           "border-[--btn-primary-bg]",
