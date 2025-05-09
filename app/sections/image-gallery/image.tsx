@@ -1,3 +1,4 @@
+import { useHref } from "@remix-run/react";
 import type {
   HydrogenComponentProps,
   HydrogenComponentSchema,
@@ -103,7 +104,7 @@ let ImageGalleryItem = forwardRef<HTMLImageElement, ImageGalleryItemProps>(
           />
         </div>
         {label && (
-          <div 
+          <div
             className={clsx(
               "mt-2 text-center font-sans",
               fontSizeClasses[labelFontSize],
@@ -140,6 +141,13 @@ export let schema: HydrogenComponentSchema = {
           name: "label",
           label: "Label",
           defaultValue: "",
+        },
+        {
+          type: "url",
+          name: "to",
+          label: "Link to",
+          defaultValue: "/products",
+          placeholder: "/products",
         },
         {
           type: "range",
