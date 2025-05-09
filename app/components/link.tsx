@@ -18,6 +18,8 @@ let variants = cva(["transition-colors inline-flex"], {
   variants: {
     variant: {
       primary: [
+        "font-normal",
+        "text-base",
         "rounded-md",
         "border px-4 py-3",
         "text-[--btn-primary-text]",
