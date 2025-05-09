@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { forwardRef } from "react";
 import { Image } from "~/components/image";
 
-let variants = cva("h-[--image-height]", {
+let variants = cva("relative h-[--image-height]", {
   variants: {
     columnSpan: {
       1: "col-span-1",
@@ -48,23 +48,73 @@ interface ImageGalleryItemProps
   extends VariantProps<typeof variants>,
     HydrogenComponentProps {
   src: WeaverseImage;
+  label?: string;
+  labelFontSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  labelColor?: string;
+  labelFontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
 }
 
 let ImageGalleryItem = forwardRef<HTMLImageElement, ImageGalleryItemProps>(
   (props, ref) => {
-    let { src, columnSpan, borderRadius, hideOnMobile, ...rest } = props;
+    let { 
+      src, 
+      columnSpan, 
+      borderRadius, 
+      hideOnMobile, 
+      label, 
+      labelFontSize = 'base', 
+      labelColor,
+      labelFontWeight = 'normal',
+      ...rest 
+    } = props;
     let data = typeof src === "object" ? src : { url: src, altText: src };
+
+    const fontSizeClasses = {
+      'xs': 'text-xs',
+      'sm': 'text-sm',
+      'base': 'text-base',
+      'lg': 'text-lg',
+      'xl': 'text-xl',
+    };
+
+    const fontWeightClasses = {
+      'normal': 'font-normal',
+      'medium': 'font-medium',
+      'semibold': 'font-semibold',
+      'bold': 'font-bold',
+    };
+
     return (
-      <Image
-        ref={ref}
-        {...rest}
-        className={clsx(variants({ columnSpan, borderRadius, hideOnMobile }))}
-        data-motion="slide-in"
-        loading="lazy"
-        data={data}
-        width={1000}
-        sizes="(min-width: 45em) 50vw, 100vw"
-      />
+      <div className="flex flex-col">
+        <div className={clsx(
+          "relative overflow-hidden",
+          variants({ columnSpan, borderRadius, hideOnMobile })
+        )}>
+          <Image
+            ref={ref}
+            {...rest}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            data-motion="slide-in"
+            loading="lazy"
+            data={data}
+            width={800}
+            height={600}
+            sizes="(min-width: 45em) 50vw, 100vw"
+          />
+        </div>
+        {label && (
+          <div 
+            className={clsx(
+              "mt-2 text-center font-sans",
+              fontSizeClasses[labelFontSize],
+              fontWeightClasses[labelFontWeight]
+            )}
+            style={labelColor ? { color: labelColor } : undefined}
+          >
+            {label}
+          </div>
+        )}
+      </div>
     );
   },
 );
@@ -84,6 +134,12 @@ export let schema: HydrogenComponentSchema = {
           label: "Image",
           defaultValue:
             "https://cdn.shopify.com/s/files/1/0838/0052/3057/files/h2-placeholder-image.svg",
+        },
+        {
+          type: "text",
+          name: "label",
+          label: "Label",
+          defaultValue: "",
         },
         {
           type: "range",
@@ -113,6 +169,41 @@ export let schema: HydrogenComponentSchema = {
           label: "Hide on mobile",
           name: "hideOnMobile",
           defaultValue: false,
+        },
+        {
+          type: "select",
+          name: "labelFontSize",
+          label: "Label Font Size",
+          configs: {
+            options: [
+              { label: "Extra Small", value: "xs" },
+              { label: "Small", value: "sm" },
+              { label: "Base", value: "base" },
+              { label: "Large", value: "lg" },
+              { label: "Extra Large", value: "xl" },
+            ],
+          },
+          defaultValue: "base",
+        },
+        {
+          type: "select",
+          name: "labelFontWeight",
+          label: "Label Font Weight",
+          configs: {
+            options: [
+              { label: "Normal", value: "normal" },
+              { label: "Medium", value: "medium" },
+              { label: "Semibold", value: "semibold" },
+              { label: "Bold", value: "bold" },
+            ],
+          },
+          defaultValue: "normal",
+        },
+        {
+          type: "color",
+          name: "labelColor",
+          label: "Label Color",
+          defaultValue: "",
         },
       ],
     },

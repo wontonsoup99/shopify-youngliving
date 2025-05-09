@@ -15,7 +15,7 @@ let variants = cva(
   [
     "promotion-grid-item",
     "group/overlay",
-    "relative aspect-square overflow-hidden flex flex-col gap-4 p-4",
+    "relative h-[440px] overflow-hidden flex flex-col gap-4 p-4",
     "[&_.paragraph]:mx-[unset]",
   ],
   {
